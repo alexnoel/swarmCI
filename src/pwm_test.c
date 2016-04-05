@@ -39,8 +39,9 @@ void Init_PWM(void){
 
 	// module 1-pwm5 is on port pf1
 	//configure gpio for output
+	ROM_GPIOPinConfigure(GPIO_PF2_M1PWM6);
 	ROM_GPIOPinConfigure(GPIO_PF1_M1PWM5);
-	ROM_GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_1);
+	ROM_GPIOPinTypePWM(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2);
 
 	//configure pwm gen2 (gen2 covers pwm 4 and 5)
 	//gen_mode_down makes all pwm left aligned
@@ -49,23 +50,28 @@ void Init_PWM(void){
 	//DBG_RUN allows the pwm module to continue to run when debug mode
 	//	causes execution to stop 
 	ROM_PWMGenConfigure(PWM1_BASE, PWM_GEN_2, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC | 		  PWM_GEN_MODE_DBG_RUN);
-
+	ROM_PWMGenConfigure(PWM1_BASE, PWM_GEN_3, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC | 		  PWM_GEN_MODE_DBG_RUN);
 
 	//set the period of the pwm module
 	ROM_PWMGenPeriodSet(PWM1_BASE,PWM_GEN_2, PWM_PERIOD_GEN_2);	
+	ROM_PWMGenPeriodSet(PWM1_BASE,PWM_GEN_3, PWM_PERIOD_GEN_2);
 	
 
+	ROM_PWMPulseWidthSet(PWM1_BASE, PWM_OUT_5, 0);
+	ROM_PWMPulseWidthSet(PWM1_BASE, PWM_OUT_6, 0);
 }
+
+
 
 //************************************************
 //
-// Sets the pwm duty cycle. 
+// Sets the pwm duty cycle for Port F1;
 // input: duty - a 32 bit unsigned integer.
 // duty is clipped from 0 to 100 inclusive.
 //
 //************************************************
 
-void set_PWM_duty(int duty){
+void set_PWM_duty_F1(int duty){
 
 	if(duty > 100) duty = 100;
 
@@ -75,8 +81,30 @@ void set_PWM_duty(int duty){
 
 
 	ROM_PWMPulseWidthSet(PWM1_BASE, PWM_OUT_5, duty * 4);
+
 }
 
+
+//************************************************
+//
+// Sets the pwm duty cycle for Port F2;
+// input: duty - a 32 bit unsigned integer.
+// duty is clipped from 0 to 100 inclusive.
+//
+//************************************************
+
+void set_PWM_duty_F2(int duty){
+
+	if(duty > 100) duty = 100;
+
+	if(duty < 0) duty = 0;
+
+	
+
+
+	ROM_PWMPulseWidthSet(PWM1_BASE, PWM_OUT_6, duty * 4);
+
+}
 
 //************************************************
 //
@@ -89,7 +117,8 @@ void start_PWM(void){
 	set_PWM_duty(50);
 	ROM_PWMGenEnable(PWM1_BASE, PWM_GEN_2);
 
-	ROM_PWMOutputState(PWM1_BASE, PWM_OUT_5_BIT, true);
+	ROM_PWMOutputState(PWM1_BASE, PWM_OUT_5_BIT | PWM_OUT_6_BIT, true);
+	
 }
 
 
@@ -102,7 +131,7 @@ void start_PWM(void){
 
 void stop_pwm(void){
 
-	ROM_PWMOutputState(PWM1_BASE, PWM_OUT_5_BIT, false);
+	ROM_PWMOutputState(PWM1_BASE, PWM_OUT_5_BIT | PWM_OUT_6_BIT, false);
 	ROM_PWMGenDisable(PWM1_BASE, PWM_GEN_2);
 }
 

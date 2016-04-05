@@ -36,10 +36,20 @@ void stop_PWM(void);
 
 //************************************************
 //
-// Sets the pwm duty cycle. 
+// Sets the pwm duty cycle on port. 
 // input: duty - a 32 bit unsigned integer.
 // duty is clipped from 0 to 100 inclusive.
 //
 //************************************************
 
-void set_PWM_duty(int duty);
+void set_PWM_duty_F1(int duty);
+
+//************************************************
+//
+// Sets the pwm duty cycle on port f2. 
+// input: duty - a 32 bit unsigned integer.
+// duty is clipped from 0 to 100 inclusive.
+//
+//************************************************
+
+void set_PWM_duty_F2(int duty);
