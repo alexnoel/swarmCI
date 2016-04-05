@@ -7,6 +7,8 @@
 #ifndef UART_COMMS_H_
 #define UART_COMMS_H_
 
+#include <stdint.h>
+
 //************************************************
 //
 // Initialize the given UART controller
