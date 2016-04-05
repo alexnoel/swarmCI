@@ -7,7 +7,6 @@
 
 #include "uart_comms.h"
 
-#include <stdint.h>
 #include <stdbool.h>
 
 #include "inc/hw_memmap.h"
