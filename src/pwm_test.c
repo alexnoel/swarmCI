@@ -114,7 +114,8 @@ void set_PWM_duty_F2(int duty){
 
 void start_PWM(void){
 
-	set_PWM_duty(50);
+	set_PWM_duty_F1(50);
+	set_PWM_duty_F2(50);
 	ROM_PWMGenEnable(PWM1_BASE, PWM_GEN_2);
 
 	ROM_PWMOutputState(PWM1_BASE, PWM_OUT_5_BIT | PWM_OUT_6_BIT, true);

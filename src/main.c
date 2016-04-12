@@ -36,7 +36,8 @@ int main()
 	
 	//set the pwm duty cycle for the red led, and increase to 100%, then come back to 0%.
 	//rinse and repeat
-	set_PWM_duty(count);
+	set_PWM_duty_F1(count);
+	set_PWM_duty_F2(count);
 
 	ROM_SysCtlDelay(45000);
 
