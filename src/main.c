@@ -13,6 +13,7 @@
 
 
 #include "pwm_test.h"
+#include "uart_comms.h"
 
 #define LED_RED GPIO_PIN_1
 #define LED_BLUE GPIO_PIN_2
@@ -27,33 +28,39 @@ int main()
 
 	int count = 0;
 	int updown = 1;
+	char uart_return = '\n';
 
 	start_PWM();
-		
+	initUART(UART1_BASE);
+
 
    for (;;) {
 	
-	
+	// Wait on character from UART1
+   	uart_return = getCharUART(UART1_BASE);
+
+   	switch(uart_return){
+   		case '0':
+   			set_PWM_duty_F1(0);
+			set_PWM_duty_F2(0);
+   			break;
+   		case '1':
+   			set_PWM_duty_F1(100);
+			set_PWM_duty_F2(100);
+   			break;
+   		default:
+   			//set port f  |= 0x4
+   			ROM_GPIOPinWrite(GPIO_PORTF_BASE,GPIO_PIN_2, 0x04);
+   	}
+
+
 	//set the pwm duty cycle for the red led, and increase to 100%, then come back to 0%.
 	//rinse and repeat
-	set_PWM_duty_F1(count);
-	set_PWM_duty_F2(count);
 
-	ROM_SysCtlDelay(45000);
 
-	if(count == 100){
-		updown = 0;
-	}
-	if(count == 0){
-		updown = 1;
-	}
 
-	if(updown == 1){
-		count++;
-	}
-	else{
-		count--;
-    }
+
+	
 
 }	
 
